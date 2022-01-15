@@ -35,8 +35,9 @@ func main() {
 		if b == 0 {
 			fmt.Println("Ошибка - Деление на ноль")
 			os.Exit(1)
-			res = a / b
 		}
+		res = a / b
+
 	case "%":
 		res = math.Mod(a, b)
 
