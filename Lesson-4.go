@@ -9,20 +9,19 @@ import (
 
 func main() {
 	inputNums := []int64{}
+	var flag bool
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		num, err := strconv.ParseInt(scanner.Text(), 10, 64)
-		//Отвечу почему сделал так.
-		//Сначала вводим несколько чисел (число и Enter).
-		//Затем, чтобы вывести отсортированный слайс, нажимаем еще раз Enter.
-		//Не смог разобраться как прервать набор массива и вывести результат в консоль, сделал вот так.
-		//Понимаю что нет вызова ошибок.
 		if err != nil {
-			Sort(inputNums)
-			fmt.Println(inputNums)
+			flag = true
 			break
 		}
 		inputNums = append(inputNums, num)
+	}
+	if flag == true {
+		Sort(inputNums)
+		fmt.Println(inputNums)
 	}
 }
 func Sort(arr []int64) {
