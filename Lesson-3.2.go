@@ -3,19 +3,20 @@ package main
 import "fmt"
 
 func main() {
-	var number, a, b, c int
+	var number, j, i, flag int
 
 	fmt.Print("Введите число : ")
 	fmt.Scan(&number)
-	for a = 2; a <= number; a++ {
-		c = 0
-		for b = 1; b <= a; b++ {
-			if a%b == 0 {
-				c++
+	for j = 2; j <= number; j++ {
+		flag = 0
+		for i = 2; i <= j/i; i++ {
+			if j%i == 0 {
+				flag = 1
+				break
 			}
 		}
-		if c == 2 {
-			fmt.Println(a)
+		if flag == 0 {
+			fmt.Println(j)
 		}
 	}
 }
