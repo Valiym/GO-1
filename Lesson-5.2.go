@@ -1,24 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func fib(n int) int {
-	cache := make(map[int]int)
-	for i := 0; i <= n; i++ {
-		var f int
-		if i <= 2 {
-			f = 1
-		} else {
-			f = cache[i-1] + cache[i-2]
-		}
-		cache[i] = f
+var cache = make(map[uint]uint64)
+
+func fib(n uint) (result uint64) {
+	if result, ok := cache[n]; ok {
+		return result
 	}
-	return cache[n]
+	defer func() {
+		cache[n] = result
+	}()
+	if n <= 1 {
+		return uint64(n)
+	}
+	return fib(n-1) + fib(n-2)
 }
-
 func main() {
-	var v int
+	var v uint
 	fmt.Print("Введите число : ")
 	fmt.Scan(&v)
 	fmt.Println(fib(v))
+
 }
