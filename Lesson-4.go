@@ -13,7 +13,8 @@ func main() {
 	for scanner.Scan() {
 		num, err := strconv.ParseInt(scanner.Text(), 10, 64)
 		if err != nil {
-			panic(err)
+			fmt.Printf("Ошибка - Введите число")
+			return
 		}
 		inputNums = append(inputNums, num)
 	}
