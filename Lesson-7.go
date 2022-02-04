@@ -10,52 +10,47 @@ var op string
 var err error
 
 type Sum struct {
-	First  float32
-	Second float32
+	FirstNumber  float32
+	SecondNumber float32
 }
 
-func (s *Sum) CalculateArea() float32 {
-	return s.First + s.Second
+func (s *Sum) Calculate() float32 {
+	return s.FirstNumber + s.SecondNumber
 }
 
 type Sub struct {
-	First  float32
-	Second float32
+	FirstNumber  float32
+	SecondNumber float32
 }
 
-func (s *Sub) CalculateArea() float32 {
-	return s.First - s.Second
+func (s *Sub) Calculate() float32 {
+	return s.FirstNumber - s.SecondNumber
 }
 
 type Mult struct {
-	First  float32
-	Second float32
+	FirstNumber  float32
+	SecondNumber float32
 }
 
-func (s *Mult) CalculateArea() float32 {
-	return s.First * s.Second
+func (s *Mult) Calculate() float32 {
+	return s.FirstNumber * s.SecondNumber
 }
 
 type Div struct {
-	First  float32
-	Second float32
+	FirstNumber  float32
+	SecondNumber float32
 }
 
-func (s *Div) CalculateArea() float32 {
-	if s.Second == 0 {
+func (s *Div) Calculate() float32 {
+	if s.SecondNumber == 0 {
 		fmt.Printf("Ошибка - Деление на ноль")
-		os.Exit(1)
 	}
-	return s.First / s.Second
+	return s.FirstNumber / s.SecondNumber
 }
 
-type AreaCalculator interface {
-	CalculateArea() float32
+type Calculator interface {
+	Calculate() float32
 }
-
-//Как по мне, код получился из сплошных костылей, уверен есть решение проще.
-//С выбором знаков операции возникли сложности, пришлось опять использовать switch.
-//По-хорошему, надо эту задачу разобрать на уроке, хотя-бы посмотреть как она должна выглядеть в идеале.
 
 func main() {
 	fmt.Print("Введите первое число: ")
@@ -70,27 +65,30 @@ func main() {
 		fmt.Printf("Ошибка - Введите число")
 		return
 	}
-	sum := &Sum{First: i, Second: j}
-	sub := &Sub{First: i, Second: j}
-	mult := &Mult{First: i, Second: j}
-	div := &Div{First: i, Second: j}
+	sum := &Sum{FirstNumber: i, SecondNumber: j}
+	sub := &Sub{FirstNumber: i, SecondNumber: j}
+	mult := &Mult{FirstNumber: i, SecondNumber: j}
+	div := &Div{FirstNumber: i, SecondNumber: j}
 
 	fmt.Print("Введите арифметическую операцию (+, -, *, /): ")
-	fmt.Scanln(&op)
+	_, err = fmt.Scanln(&op)
+	if err != nil {
+		return
+	}
 
 	switch op {
 	case "+":
-		var shape AreaCalculator = sum
-		fmt.Println(shape.CalculateArea())
+		var shape Calculator = sum
+		fmt.Println(shape.Calculate())
 	case "-":
-		var shape AreaCalculator = sub
-		fmt.Println(shape.CalculateArea())
+		var shape Calculator = sub
+		fmt.Println(shape.Calculate())
 	case "*":
-		var shape AreaCalculator = mult
-		fmt.Println(shape.CalculateArea())
+		var shape Calculator = mult
+		fmt.Println(shape.Calculate())
 	case "/":
-		var shape AreaCalculator = div
-		fmt.Println(shape.CalculateArea())
+		var shape Calculator = div
+		fmt.Println(shape.Calculate())
 	default:
 		fmt.Println("Ошибка - Операция выбрана неверно")
 		os.Exit(1)
