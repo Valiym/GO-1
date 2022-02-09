@@ -8,13 +8,12 @@ import (
 )
 
 func main() {
-	inputNums := []int64{}
+	inputNums := []int64
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		num, err := strconv.ParseInt(scanner.Text(), 10, 64)
 		if err != nil {
-			fmt.Printf("Ошибка - Введите число")
-			return
+			break
 		}
 		inputNums = append(inputNums, num)
 	}
