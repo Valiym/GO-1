@@ -1,67 +1,64 @@
 package configuration
 
 import (
+	"flag"
 	"fmt"
-	"github.com/kelseyhightower/envconfig"
-	"github.com/namsral/flag"
 	"net/url"
 )
 
 type Configuration struct {
-	Port        int    `envconfig:"PORT" default:"8080"`
-	DbUrl       string `envconfig:"DB_URL" default:"postgres: //db-user:db-password@petstore-db:5432/petstore?sslmode=disable"`
-	JaegerUrl   string `envconfig:"JAEGER_URL" default:"http: //jaeger:16686"`
-	SentryUrl   string `envconfig:"SENTRY_URL" default:"http: //sentry:9000"`
-	KafkaBroker string `envconfig:"KAFKA_BROKER" default:"kafka:9092"`
-	SomeAppId   int    `envconfig:"SOME_APP_ID" default:"5000"`
-	SomeAppKey  string `envconfig:"SOME_APP_KEY" default:"someAppKey"`
+	Port        int
+	DbURL       string
+	JaegerURL   string
+	SentryURL   string
+	KafkaBroker string
+	SomeAppID   int
+	SomeAppKey  string
 }
 
 func Load() (*Configuration, error) {
 	var config = Configuration{}
-	err := envconfig.Process("configuration", &config)
-	if err != nil {
-		fmt.Println("config could not be load: ", err)
-	}
+
 	flag.IntVar(&config.Port, "port", 8080, "port 1000-65535")
-	flag.StringVar(&config.DbUrl, "dbUrl", "postgres://db-user:db-password@petstore-db:5432/petstore?sslmode=disable", "database url")
-	flag.StringVar(&config.JaegerUrl, "jaeger", "http://jaeger:16686", "jaeger url")
-	flag.StringVar(&config.SentryUrl, "sentry", "http://sentry:9000", "sentry url")
+	flag.StringVar(&config.DbURL, "dbURL", "postgres://db-user:db-password@petstore-db:5432/petstore?sslmode=disable", "database url")
+	flag.StringVar(&config.JaegerURL, "jaegerURL", "http://jaeger:16686", "jaeger url")
+	flag.StringVar(&config.SentryURL, "sentryURL", "http://sentry:9000", "sentry url")
 	flag.StringVar(&config.KafkaBroker, "kafka", "http://kafka:9092", "kafka broker")
-	flag.IntVar(&config.SomeAppId, "someAppId", 5000, "some app id")
+	flag.IntVar(&config.SomeAppID, "someAppID", 5002, "some app id")
 	flag.StringVar(&config.SomeAppKey, "someAppKey", "someAppKey", "some app key")
 	flag.Parse()
-	err = validate(&config)
+
+	err := validate(&config)
 	if err != nil {
 		return &config, err
 	}
 
-	return &config, err
+	return &config, nil
 }
 
 func validate(cfg *Configuration) error {
 	if cfg.Port > 65535 || cfg.Port < 1000 {
-		fmt.Println("invalid port value")
+		return fmt.Errorf("invalid port value")
 	}
-	if !valid(cfg.DbUrl) {
-		fmt.Println("invalid dbUrl value")
+	if !validURL(cfg.DbURL) {
+		return fmt.Errorf("invalid dbURL value")
 	}
-	if !valid(cfg.JaegerUrl) {
-		fmt.Println("invalid jaegerUrl value")
+	if !validURL(cfg.JaegerURL) {
+		return fmt.Errorf("invalid jaegerURL value")
 	}
-	if !valid(cfg.SentryUrl) {
-		fmt.Println("invalid sentryUrl value")
+	if !validURL(cfg.SentryURL) {
+		return fmt.Errorf("invalid sentryURL value")
 	}
-	if !valid(cfg.KafkaBroker) {
-		fmt.Println("invalid kafkaBroker value")
+	if !validURL(cfg.KafkaBroker) {
+		return fmt.Errorf("invalid kafkaBroker value")
 	}
-	if cfg.SomeAppId < 1000 {
-		fmt.Println("invalid someAppId value")
+	if cfg.SomeAppID < 1000 {
+		return fmt.Errorf("invalid someAppID value")
 	}
 	return nil
 }
 
-func valid(str string) bool {
+func validURL(str string) bool {
 	p, err := url.Parse(str)
 	return err == nil || p.Scheme != "" || p.Host != ""
 }
