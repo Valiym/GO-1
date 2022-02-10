@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	app, err := configuration.Load()
+	config, err := configuration.Load()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("config could not be load: ", err)
 	}
-	fmt.Println(&app)
+	fmt.Println(config)
 }
