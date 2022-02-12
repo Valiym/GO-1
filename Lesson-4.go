@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	inputNums := []int64
+	var inputNums []int64
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		num, err := strconv.ParseInt(scanner.Text(), 10, 64)
