@@ -20,7 +20,7 @@ func main() {
 	Sort(inputNums)
 	fmt.Println(inputNums)
 }
-func Sort(arr []int64) {
+func Sort(arr []int64) []int64 {
 	for i := 1; i < len(arr); i++ {
 		a := arr[i]
 		b := i
@@ -29,4 +29,5 @@ func Sort(arr []int64) {
 		}
 		arr[b] = a
 	}
+	return arr
 }
