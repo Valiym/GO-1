@@ -30,7 +30,7 @@ func Load() (*Configuration, error) {
 
 	err := validate(&config)
 	if err != nil {
-		return &config, err
+		return nil, err
 	}
 
 	return &config, nil
